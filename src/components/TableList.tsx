@@ -18,7 +18,11 @@ const TableList: React.FC = () => {
   const fetchTables = async () => {
     try {
       setLoading(true);
-      setError('');
+      const { data, error } = await supabase
+        .from('information_schema.tables')
+        .select('table_name')
+        .eq('table_schema', 'public')
+        .eq('table_type', 'BASE TABLE');
 
       // Query the information_schema to get list of tables in public schema
       const { data, error } = await supabase
@@ -40,7 +44,7 @@ const TableList: React.FC = () => {
         setTables(data || []);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch tables');
+      setTables(data?.map(table => ({ table_name: table.table_name })) || []);
       console.error('Error fetching tables:', err);
     } finally {
       setLoading(false);
