@@ -18,12 +18,6 @@ const TableList: React.FC = () => {
   const fetchTables = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('information_schema.tables')
-        .select('table_name')
-        .eq('table_schema', 'public')
-        .eq('table_type', 'BASE TABLE');
-
       // Query the information_schema to get list of tables in public schema
       const { data, error } = await supabase
         .from('information_schema.tables')
