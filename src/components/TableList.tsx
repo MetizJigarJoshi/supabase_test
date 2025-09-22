@@ -38,7 +38,7 @@ const TableList: React.FC = () => {
         setTables(data || []);
       }
     } catch (err: any) {
-      setTables(data?.map(table => ({ table_name: table.table_name })) || []);
+      setError('Unable to fetch tables. Make sure you have proper permissions.');
       console.error('Error fetching tables:', err);
     } finally {
       setLoading(false);
