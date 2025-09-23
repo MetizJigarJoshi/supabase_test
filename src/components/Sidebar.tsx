@@ -3,7 +3,7 @@ import { TestCategory } from '../App';
 import {
   HomeIcon,
   UserIcon,
-  DatabaseIcon,
+  ServerStackIcon,
   FolderIcon,
   BoltIcon,
   GlobeAltIcon,
@@ -21,7 +21,7 @@ interface SidebarProps {
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: HomeIcon },
   { id: 'auth', label: 'Authentication', icon: UserIcon },
-  { id: 'database', label: 'Database', icon: DatabaseIcon },
+  { id: 'database', label: 'Database', icon: ServerStackIcon },
   { id: 'storage', label: 'Storage', icon: FolderIcon },
   { id: 'realtime', label: 'Realtime', icon: BoltIcon },
   { id: 'api', label: 'API Testing', icon: GlobeAltIcon },
