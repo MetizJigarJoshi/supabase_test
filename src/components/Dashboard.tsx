@@ -45,10 +45,8 @@ const Dashboard: React.FC = () => {
         timestamp: new Date()
       });
 
-      const { data, error } = await supabase
-        .from('information_schema.tables')
-        .select('table_name')
-        .limit(1);
+      // Test connection using a simple RPC call or auth endpoint
+      const { data, error } = await supabase.auth.getSession();
 
       if (error) {
         setConnectionStatus({
