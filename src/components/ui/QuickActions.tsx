@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, Activity, FileText, LucideIcon } from 'lucide-react';
+import { Play, Activity, FileText, DivideIcon as LucideIcon } from 'lucide-react';
 
 interface QuickActionProps {
   title: string;
