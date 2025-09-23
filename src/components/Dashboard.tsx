@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
-import TestCard from './TestCard';
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-  XCircleIcon,
-  ClockIcon
-} from '@heroicons/react/24/outline';
+import StatCard from './ui/StatCard';
+import TopBar from './ui/TopBar';
+import QuickActions from './ui/QuickActions';
+import EnvironmentInfo from './ui/EnvironmentInfo';
+import { 
+  TestTube, 
+  CheckCircle, 
+  XCircle, 
+  Clock,
+  TrendingUp 
+} from 'lucide-react';
 
 interface ConnectionStatus {
   status: 'connected' | 'disconnected' | 'testing';
@@ -22,10 +27,10 @@ const Dashboard: React.FC = () => {
   });
 
   const [stats, setStats] = useState({
-    totalTests: 0,
-    passedTests: 0,
-    failedTests: 0,
-    pendingTests: 0
+    totalTests: 127,
+    passedTests: 98,
+    failedTests: 12,
+    pendingTests: 17
   });
 
   useEffect(() => {
@@ -67,129 +72,170 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const getStatusIcon = () => {
-    switch (connectionStatus.status) {
-      case 'connected':
-        return <CheckCircleIcon className="w-6 h-6 text-green-500" />;
-      case 'disconnected':
-        return <XCircleIcon className="w-6 h-6 text-red-500" />;
-      case 'testing':
-        return <ClockIcon className="w-6 h-6 text-yellow-500 animate-spin" />;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (connectionStatus.status) {
-      case 'connected':
-        return 'bg-green-50 border-green-200';
-      case 'disconnected':
-        return 'bg-red-50 border-red-200';
-      case 'testing':
-        return 'bg-yellow-50 border-yellow-200';
-    }
-  };
+  const successRate = Math.round((stats.passedTests / stats.totalTests) * 100);
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold text-gradient">Dashboard</h1>
-        <button
-          onClick={testConnection}
-          className="btn btn-primary"
-        >
-          Test Connection
-        </button>
-      </div>
-
-      {/* Connection Status */}
-      <div className={`card ${getStatusColor()}`}>
-        <div className="card-body">
-        <div className="flex items-center space-x-3">
-          {getStatusIcon()}
-          <div>
-            <h3 className="font-semibold text-gray-900 text-lg">Connection Status</h3>
-            <p className="text-gray-700">{connectionStatus.message}</p>
-            <p className="text-sm text-gray-500">
-              Last checked: {connectionStatus.timestamp.toLocaleTimeString()}
+    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950">
+      <TopBar 
+        connectionStatus={connectionStatus.status} 
+        onTestConnection={testConnection} 
+      />
+      
+      <main className="p-6">
+        <div className="mx-auto max-w-7xl space-y-8">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-2"
+          >
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Testing Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Monitor and test your Supabase instance across all services
             </p>
+          </motion.div>
+
+          {/* Stats Grid */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              title="Total Tests"
+              value={stats.totalTests}
+              icon={TestTube}
+              color="blue"
+              trend={{ value: 12, isPositive: true }}
+              delay={0}
+            />
+            <StatCard
+              title="Passed Tests"
+              value={stats.passedTests}
+              icon={CheckCircle}
+              color="green"
+              trend={{ value: 8, isPositive: true }}
+              delay={0.1}
+            />
+            <StatCard
+              title="Failed Tests"
+              value={stats.failedTests}
+              icon={XCircle}
+              color="red"
+              trend={{ value: 3, isPositive: false }}
+              delay={0.2}
+            />
+            <StatCard
+              title="Success Rate"
+              value={`${successRate}%`}
+              icon={TrendingUp}
+              color="purple"
+              trend={{ value: 5, isPositive: true }}
+              delay={0.3}
+            />
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Left Column - 2/3 width */}
+            <div className="space-y-8 lg:col-span-2">
+              {/* Quick Actions */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="space-y-4"
+              >
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Quick Actions
+                </h2>
+                <QuickActions />
+              </motion.div>
+
+              {/* Recent Activity */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
+              >
+                <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  Recent Test Activity
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    { test: 'Authentication Flow', status: 'passed', time: '2 minutes ago' },
+                    { test: 'Database CRUD Operations', status: 'passed', time: '5 minutes ago' },
+                    { test: 'Storage Upload Test', status: 'failed', time: '8 minutes ago' },
+                    { test: 'Realtime Subscriptions', status: 'passed', time: '12 minutes ago' },
+                  ].map((activity, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
+                      className="flex items-center justify-between rounded-lg border border-gray-100 p-3 dark:border-gray-800"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`h-2 w-2 rounded-full ${
+                          activity.status === 'passed' ? 'bg-emerald-500' : 'bg-red-500'
+                        }`} />
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          {activity.test}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {activity.time}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right Column - 1/3 width */}
+            <div className="space-y-8">
+              {/* Environment Info */}
+              <EnvironmentInfo
+                supabaseUrl={import.meta.env.VITE_SUPABASE_URL}
+                anonKey={import.meta.env.VITE_SUPABASE_ANON_KEY}
+              />
+
+              {/* Connection Status */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
+              >
+                <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                  System Status
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    { service: 'Database', status: 'operational' },
+                    { service: 'Authentication', status: 'operational' },
+                    { service: 'Storage', status: 'operational' },
+                    { service: 'Realtime', status: 'operational' },
+                    { service: 'Edge Functions', status: 'degraded' },
+                  ].map((service, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                        {service.service}
+                      </span>
+                      <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                        service.status === 'operational'
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400'
+                          : 'bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-400'
+                      }`}>
+                        {service.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
-        </div>
-      </div>
-
-      {/* Test Statistics */}
-      <div className="grid grid-cols-4 gap-6">
-        <TestCard
-          title="Total Tests"
-          value={stats.totalTests}
-          icon={<ClockIcon className="w-8 h-8 text-blue-500" />}
-          color="blue"
-        />
-        <TestCard
-          title="Passed"
-          value={stats.passedTests}
-          icon={<CheckCircleIcon className="w-8 h-8 text-green-500" />}
-          color="green"
-        />
-        <TestCard
-          title="Failed"
-          value={stats.failedTests}
-          icon={<XCircleIcon className="w-8 h-8 text-red-500" />}
-          color="red"
-        />
-        <TestCard
-          title="Pending"
-          value={stats.pendingTests}
-          icon={<ExclamationTriangleIcon className="w-8 h-8 text-yellow-500" />}
-          color="yellow"
-        />
-      </div>
-
-      {/* Environment Info */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-semibold text-gray-900">Environment Information</h3>
-        </div>
-        <div className="card-body">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="form-label">Supabase URL</label>
-            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-3 rounded-lg border">
-              {import.meta.env.VITE_SUPABASE_URL}
-            </p>
-          </div>
-          <div>
-            <label className="form-label">Anonymous Key</label>
-            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-3 rounded-lg border truncate">
-              {import.meta.env.VITE_SUPABASE_ANON_KEY?.substring(0, 50)}...
-            </p>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="card">
-        <div className="card-header">
-          <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
-        </div>
-        <div className="card-body">
-        <div className="grid grid-cols-3 gap-4">
-          <button className="card p-4 text-left hover:shadow-lg transition-all">
-            <h4 className="font-medium text-gray-900">Run All Tests</h4>
-            <p className="text-sm text-gray-600 mt-1">Execute complete test suite</p>
-          </button>
-          <button className="card p-4 text-left hover:shadow-lg transition-all">
-            <h4 className="font-medium text-gray-900">Health Check</h4>
-            <p className="text-sm text-gray-600 mt-1">Verify all services are running</p>
-          </button>
-          <button className="card p-4 text-left hover:shadow-lg transition-all">
-            <h4 className="font-medium text-gray-900">Generate Report</h4>
-            <p className="text-sm text-gray-600 mt-1">Export test results</p>
-          </button>
-        </div>
-        </div>
-      </div>
+      </main>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import AuthTests from './components/tests/AuthTests';
 import DatabaseTests from './components/tests/DatabaseTests';
@@ -30,43 +31,47 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<TestCategory>('dashboard');
 
   const renderContent = () => {
-    switch (activeCategory) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'auth':
-        return <AuthTests />;
-      case 'database':
-        return <DatabaseTests />;
-      case 'storage':
-        return <StorageTests />;
-      case 'realtime':
-        return <RealtimeTests />;
-      case 'api':
-        return <ApiTests />;
-      case 'security':
-        return <SecurityTests />;
-      case 'performance':
-        return <PerformanceTests />;
-      case 'backup':
-        return <BackupTests />;
-      case 'runner':
-        return <TestRunner />;
-      default:
-        return <Dashboard />;
-    }
+    const components = {
+      dashboard: Dashboard,
+      auth: AuthTests,
+      database: DatabaseTests,
+      storage: StorageTests,
+      realtime: RealtimeTests,
+      api: ApiTests,
+      security: SecurityTests,
+      performance: PerformanceTests,
+      backup: BackupTests,
+      runner: TestRunner,
+    };
+
+    const Component = components[activeCategory];
+    return <Component />;
   };
 
   return (
     <NotificationProvider>
       <TestProvider>
-        <div className="app-layout">
+        <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
           <Sidebar 
             activeCategory={activeCategory} 
             onCategoryChange={setActiveCategory} 
           />
-          <main className="main-content">
-              {renderContent()}
+          
+          <main className="flex-1 overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCategory}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="h-full overflow-auto"
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
           </main>
+          
           <NotificationContainer />
         </div>
       </TestProvider>
