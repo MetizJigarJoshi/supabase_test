@@ -29,15 +29,15 @@ const NotificationContainer: React.FC = () => {
   const getBackgroundColor = (type: string) => {
     switch (type) {
       case 'success':
-        return 'bg-green-50 border-green-200';
+        return 'bg-gradient-to-r from-green-50 to-green-100 border-green-200 backdrop-blur';
       case 'error':
-        return 'bg-red-50 border-red-200';
+        return 'bg-gradient-to-r from-red-50 to-red-100 border-red-200 backdrop-blur';
       case 'warning':
-        return 'bg-yellow-50 border-yellow-200';
+        return 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 backdrop-blur';
       case 'info':
-        return 'bg-blue-50 border-blue-200';
+        return 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 backdrop-blur';
       default:
-        return 'bg-blue-50 border-blue-200';
+        return 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 backdrop-blur';
     }
   };
 
@@ -48,7 +48,7 @@ const NotificationContainer: React.FC = () => {
       {notifications.map((notification) => (
         <div
           key={notification.id}
-          className={`max-w-sm w-full shadow-lg rounded-lg border ${getBackgroundColor(notification.type)} p-4`}
+          className={`max-w-sm w-full shadow-lg rounded-lg border ${getBackgroundColor(notification.type)} p-4 animate-slide-in transform hover:scale-105 transition-all`}
         >
           <div className="flex items-start">
             <div className="flex-shrink-0">
@@ -67,7 +67,7 @@ const NotificationContainer: React.FC = () => {
             <div className="ml-4 flex-shrink-0 flex">
               <button
                 onClick={() => removeNotification(notification.id)}
-                className="inline-flex text-gray-400 hover:text-gray-500"
+                className="inline-flex text-gray-400 hover:text-gray-500 transition-colors"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>

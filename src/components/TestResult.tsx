@@ -33,18 +33,18 @@ const TestResult: React.FC<TestResultProps> = ({ result, onRetry }) => {
   const getStatusColor = () => {
     switch (result.status) {
       case 'success':
-        return 'border-green-200 bg-green-50';
+        return 'border-green-200 bg-gradient-to-r from-green-50 to-green-100';
       case 'error':
-        return 'border-red-200 bg-red-50';
+        return 'border-red-200 bg-gradient-to-r from-red-50 to-red-100';
       case 'running':
-        return 'border-blue-200 bg-blue-50';
+        return 'border-blue-200 bg-gradient-to-r from-blue-50 to-blue-100';
       case 'pending':
-        return 'border-gray-200 bg-gray-50';
+        return 'border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100';
     }
   };
 
   return (
-    <div className={`p-4 rounded-lg border ${getStatusColor()}`}>
+    <div className={`card p-4 ${getStatusColor()} animate-fade-in`}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3">
           {getStatusIcon()}
@@ -62,7 +62,7 @@ const TestResult: React.FC<TestResultProps> = ({ result, onRetry }) => {
         {result.status === 'error' && onRetry && (
           <button
             onClick={onRetry}
-            className="text-sm text-blue-600 hover:text-blue-800"
+            className="btn btn-primary text-xs"
           >
             Retry
           </button>
@@ -70,7 +70,7 @@ const TestResult: React.FC<TestResultProps> = ({ result, onRetry }) => {
       </div>
       
       {result.details && (
-        <div className="mt-3 p-3 bg-gray-100 rounded text-xs font-mono overflow-x-auto">
+        <div className="mt-3 p-3 bg-gray-900 text-green-400 rounded-lg text-xs font-mono overflow-x-auto">
           <pre>{JSON.stringify(result.details, null, 2)}</pre>
         </div>
       )}

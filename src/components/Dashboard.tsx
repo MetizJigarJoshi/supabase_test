@@ -90,33 +90,35 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold text-gradient">Dashboard</h1>
         <button
           onClick={testConnection}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="btn btn-primary"
         >
           Test Connection
         </button>
       </div>
 
       {/* Connection Status */}
-      <div className={`p-4 rounded-lg border ${getStatusColor()}`}>
+      <div className={`card ${getStatusColor()}`}>
+        <div className="card-body">
         <div className="flex items-center space-x-3">
           {getStatusIcon()}
           <div>
-            <h3 className="font-semibold text-gray-900">Connection Status</h3>
+            <h3 className="font-semibold text-gray-900 text-lg">Connection Status</h3>
             <p className="text-gray-700">{connectionStatus.message}</p>
             <p className="text-sm text-gray-500">
               Last checked: {connectionStatus.timestamp.toLocaleTimeString()}
             </p>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Test Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-4 gap-6">
         <TestCard
           title="Total Tests"
           value={stats.totalTests}
@@ -144,40 +146,48 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Environment Info */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Environment Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-semibold text-gray-900">Environment Information</h3>
+        </div>
+        <div className="card-body">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Supabase URL</label>
-            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded">
+            <label className="form-label">Supabase URL</label>
+            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-3 rounded-lg border">
               {import.meta.env.VITE_SUPABASE_URL}
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Anonymous Key</label>
-            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded truncate">
+            <label className="form-label">Anonymous Key</label>
+            <p className="mt-1 text-sm text-gray-900 font-mono bg-gray-50 p-3 rounded-lg border truncate">
               {import.meta.env.VITE_SUPABASE_ANON_KEY?.substring(0, 50)}...
             </p>
           </div>
         </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+      <div className="card">
+        <div className="card-header">
+          <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+        </div>
+        <div className="card-body">
+        <div className="grid grid-cols-3 gap-4">
+          <button className="card p-4 text-left hover:shadow-lg transition-all">
             <h4 className="font-medium text-gray-900">Run All Tests</h4>
             <p className="text-sm text-gray-600 mt-1">Execute complete test suite</p>
           </button>
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+          <button className="card p-4 text-left hover:shadow-lg transition-all">
             <h4 className="font-medium text-gray-900">Health Check</h4>
             <p className="text-sm text-gray-600 mt-1">Verify all services are running</p>
           </button>
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+          <button className="card p-4 text-left hover:shadow-lg transition-all">
             <h4 className="font-medium text-gray-900">Generate Report</h4>
             <p className="text-sm text-gray-600 mt-1">Export test results</p>
           </button>
+        </div>
         </div>
       </div>
     </div>

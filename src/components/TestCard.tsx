@@ -10,19 +10,19 @@ interface TestCardProps {
 
 const TestCard: React.FC<TestCardProps> = ({ title, value, icon, color, subtitle }) => {
   const colorClasses = {
-    blue: 'bg-blue-50 border-blue-200',
-    green: 'bg-green-50 border-green-200',
-    red: 'bg-red-50 border-red-200',
-    yellow: 'bg-yellow-50 border-yellow-200'
+    blue: 'gradient-primary text-white',
+    green: 'gradient-success text-white',
+    red: 'bg-gradient-to-br from-red-500 to-red-600 text-white',
+    yellow: 'bg-gradient-to-br from-yellow-500 to-yellow-600 text-white'
   };
 
   return (
-    <div className={`p-6 rounded-lg border ${colorClasses[color]} bg-white shadow`}>
+    <div className={`card p-6 ${colorClasses[color]} transform hover:scale-105 transition-all`}>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+          <p className="text-sm font-medium opacity-90">{title}</p>
+          <p className="text-3xl font-bold mt-2">{value}</p>
+          {subtitle && <p className="text-xs opacity-75 mt-1">{subtitle}</p>}
         </div>
         <div className="flex-shrink-0">
           {icon}
